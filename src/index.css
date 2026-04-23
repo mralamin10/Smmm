@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@600;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@600;700;800;900&family=Hind+Siliguri:wght@400;500;600;700&display=swap');
 @import "tailwindcss";
 
 @theme {
@@ -6,8 +6,9 @@
   --color-secondary: #F0F5FF;
   --color-accent: #00D1FF;
   --color-dark: #0F172A;
-  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
-  --font-display: "Poppins", sans-serif;
+  --color-whatsapp: #25D366;
+  --font-sans: "Hind Siliguri", "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Poppins", "Hind Siliguri", sans-serif;
 }
 
 @layer base {
@@ -44,4 +45,36 @@
 
 .animate-float {
   animation: float 4s ease-in-out infinite;
+}
+
+@keyframes pulse-ring {
+  0% { transform: scale(0.8); opacity: 0.5; }
+  100% { transform: scale(2); opacity: 0; }
+}
+
+@keyframes glow {
+  0%, 100% { box-shadow: 0 0 15px rgba(37, 211, 102, 0.4); }
+  50% { box-shadow: 0 0 30px rgba(37, 211, 102, 0.8); }
+}
+
+.animate-glow {
+  animation: glow 2s ease-in-out infinite;
+}
+
+.pulse-ring {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: inherit;
+  animation: pulse-ring 2s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
+}
+
+.highlight-box {
+  @apply relative overflow-hidden bg-gradient-to-br from-whatsapp/10 to-transparent border-2 border-dashed border-whatsapp/30;
+}
+
+.highlight-box::after {
+  content: '';
+  @apply absolute top-[-50%] left-[-50%] w-[200%] h-[200%] bg-[conic-gradient(from_0deg,transparent_0%,rgba(37,211,102,0.1)_50%,transparent_100%)] animate-[spin_10s_linear_infinite] pointer-events-none;
 }

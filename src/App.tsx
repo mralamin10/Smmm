@@ -21,13 +21,14 @@ import {
   ChevronDown,
   HelpCircle,
   ShoppingBag,
-  Users
+  Users,
+  Headset
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 
 const BKASH_NUMBER = "01330455893";
 const CONTACT_LINK = "https://hihello.com/p/dbe7aac8-45bb-412a-809c-bb36c7f48aa1";
-const YOUTUBE_VIDEO_ID = "dQw4w9WgXcQ"; 
+const YOUTUBE_VIDEO_ID = "ICA93yNjKMs"; 
 
 export default function App() {
   const [formData, setFormData] = useState({
@@ -56,13 +57,11 @@ export default function App() {
 
   useEffect(() => {
     const pricePer1000 = formData.followerType === 'global' ? prices.global : prices.bangladesh;
-    const calculatedPrice = (formData.quantity / 1000) * pricePer1000;
+    const calculatedPrice = Math.round((formData.quantity / 1000) * pricePer1000);
     setTotalPrice(calculatedPrice);
 
     if (formData.quantity < 1000) {
       setValidationMsg('⚠️ নূন্যতম ১০০০ ফলোয়ার');
-    } else if (formData.quantity > 5000) {
-      setValidationMsg('⚠️ সর্বোচ্চ ৫০০০ ফলোয়ার');
     } else {
       setValidationMsg('✅ ঠিক আছে');
     }
@@ -193,14 +192,18 @@ export default function App() {
               <a href="#order-form" className="btn-primary w-full sm:w-auto flex items-center justify-center gap-2 text-lg">
                 এখনই অর্ডার করুন <ArrowRight size={20} />
               </a>
-              <a 
+              <motion.a 
                 href={CONTACT_LINK} 
                 target="_blank" 
                 rel="noreferrer" 
-                className="btn-outline w-full sm:w-auto flex items-center justify-center gap-2 text-lg"
+                animate={{ 
+                  boxShadow: ["0 0 0px rgba(37, 211, 102, 0)", "0 0 20px rgba(37, 211, 102, 0.6)", "0 0 0px rgba(37, 211, 102, 0)"] 
+                }}
+                transition={{ duration: 2, repeat: Infinity }}
+                className="btn-outline border-whatsapp text-whatsapp w-full sm:w-auto flex items-center justify-center gap-2 text-lg bg-whatsapp/10 font-black"
               >
-                সরাসরি এজেন্টের সাথে যোগাযোগ
-              </a>
+                <Headset size={20} /> সাপোর্ট টিম (এজেন্টের সাথে কথা বলুন)
+              </motion.a>
             </div>
 
             <div className="mt-12 grid grid-cols-2 md:grid-cols-4 gap-4">
@@ -298,13 +301,14 @@ export default function App() {
                   </div>
                 </div>
                 <div>
-                  <label className="flex items-center gap-2 text-sm font-bold text-slate-500 mb-2 ml-2">
-                    <Users size={16} className="text-primary" /> পরিমাণ (১০০০-৫০০০)
+                  <label className="flex flex-col text-sm font-bold text-slate-500 mb-2 ml-2 leading-tight">
+                    <span className="flex items-center gap-2 font-black text-slate-800"><Users size={16} className="text-primary" /> পরিমাণ (নূন্যতম ১০০০)</span>
+                    <span className="text-[11px] text-primary font-black mt-1 bg-primary/5 px-2 py-0.5 rounded-md inline-block">*(৫০০০ এর বেশি নিতে সাপোর্ট টিমে যোগাযোগ করুন)</span>
                   </label>
                   <input 
-                    type="number" name="quantity" min="1000" max="5000" step="1000" required
-                    placeholder="1000/5000"
-                    className="input-field py-3.5 text-base"
+                    type="number" name="quantity" min="1000" required
+                    placeholder="1000"
+                    className="input-field py-3.5 text-base font-black"
                     value={formData.quantity} onChange={handleInputChange}
                   />
                   <p className={`text-xs mt-1.5 font-bold ml-2 ${validationMsg.includes('⚠️') ? 'text-red-500' : 'text-green-600'}`}>
@@ -377,15 +381,24 @@ export default function App() {
                 অর্ডার রিভিউ করুন
               </button>
 
-              <div className="text-center pt-2">
-                <p className="text-slate-500 text-sm mb-2">বেশি পরিমাণে নিতে চাইলে যোগাযোগ করুন</p>
+              <div className="text-center pt-8 px-6 pb-6 rounded-[2rem] highlight-box">
+                <p className="text-dark text-lg font-black mb-4 tracking-tight">৫০০০+ ফলোয়ার নিতে চাচ্ছেন?</p>
                 <a 
                   href={CONTACT_LINK}
                   target="_blank"
                   rel="noreferrer"
-                  className="inline-flex items-center gap-2 text-primary font-bold hover:underline text-sm"
+                  className="inline-flex items-center gap-3 bg-whatsapp text-white px-10 py-4 rounded-full font-black hover:scale-110 active:scale-95 transition-all text-base shadow-2xl shadow-whatsapp/40 group/btn"
                 >
-                  সরাসরি এজেন্টের সাথে যোগাযোগ <ArrowRight size={16} />
+                  <Headset size={22} className="animate-pulse" /> 
+                  <span className="relative">
+                    সাপোর্ট টিমের সাথে কথা বলুন
+                    <motion.span 
+                      className="absolute -bottom-1 left-0 w-full h-0.5 bg-white/50"
+                      initial={{ scaleX: 0 }}
+                      whileHover={{ scaleX: 1 }}
+                    />
+                  </span>
+                  <ArrowRight size={20} className="group-hover/btn:translate-x-1 transition-transform" />
                 </a>
               </div>
             </form>
@@ -556,10 +569,11 @@ export default function App() {
       <motion.a
         href={CONTACT_LINK}
         target="_blank" rel="noreferrer"
-        className="fixed bottom-6 right-6 z-40 w-14 h-14 bg-primary text-white rounded-full flex items-center justify-center shadow-2xl shadow-primary/40 animate-float"
+        className="fixed bottom-6 right-6 z-40 w-16 h-16 bg-[#25D366] text-white rounded-full flex items-center justify-center shadow-2xl shadow-[#25D366]/40 animate-glow"
         whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}
       >
-        <MessageCircle size={32} />
+        <div className="pulse-ring bg-[#25D366]" />
+        <Headset size={36} className="relative z-10" />
       </motion.a>
 
       {/* Footer */}
